@@ -1,0 +1,34 @@
+.container{
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.title{
+  color: black;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.other{
+  color: white;
+  margin: 20px;
+}
+
+.eachOther{
+  width: 33%;
+  height: 330px;
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+.eachOther:hover{
+  background-color: orange;
+}
+
+.eachOther img{
+  width: 50%;
+  height: auto;
+}
