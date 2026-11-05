@@ -1,5 +1,5 @@
 import style from "./Home.module.css";
-import rockPaperScissors from "../assets/images/Rock-paper-scissors.png";
+import rockPaperScissors from "../assets/images/rockPaperScissors/Rock-paper-scissors.png";
 import { Link } from "react-router-dom";
 
 function Home() {
