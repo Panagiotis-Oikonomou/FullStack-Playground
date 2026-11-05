@@ -18,4 +18,16 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    "rules": {
+        "no-unused-vars": ["warn", {
+            "vars": "local",
+            "args": "after-used",
+            "caughtErrors": "all",
+            "ignoreRestSiblings": false,
+            "ignoreUsingDeclarations": false,
+            "reportUsedIgnorePattern": false
+        }]
+    }
+}
 ])
