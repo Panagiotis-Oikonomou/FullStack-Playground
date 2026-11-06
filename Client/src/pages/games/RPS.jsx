@@ -1,8 +1,8 @@
 import style from "./RPS.module.css";
-import rock from "../assets/images/rockPaperScissors/rock.png";
-import paper from "../assets/images/rockPaperScissors/paper.png";
-import scissors from "../assets/images/rockPaperScissors/scissors.png";
-import { useState } from "react";
+import rock from "../../assets/images/rockPaperScissors/rock.png";
+import paper from "../../assets/images/rockPaperScissors/paper.png";
+import scissors from "../../assets/images/rockPaperScissors/scissors.png";
+import { useEffect, useState } from "react";
 
 function RPS() {
     const [showResult, setShowResult] = useState(false);
@@ -12,6 +12,8 @@ function RPS() {
     const [meImage, setMeImage] = useState(rock);
     const [computerImage, setComputerImage] = useState(rock);
     const images = { rock, paper, scissors };
+
+    useEffect(() => { document.title = "Rock-Paper-Scissors" }, []);
 
     function play(choice) {
         setShowResult(true);
