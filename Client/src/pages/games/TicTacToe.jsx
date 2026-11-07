@@ -14,8 +14,12 @@ function TicTacToe() {
     const c = { cursor: "pointer" };
     const wonStyle = { backgroundColor: "green", cursor: "default" };
     const [s, setS] = useState([c, c, c, c, c, c, c, c, c]);
-
     const [boxes, setBoxes] = useState(["", "", "", "", "", "", "", "", ""]);
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
 
     useEffect(() => { document.title = "Tic-Tac-Toe" }, []);
 
@@ -29,17 +33,17 @@ function TicTacToe() {
     }, [firstPlayer]);
 
     useEffect(() => {
-        const fillWithGreen = (i0, i1, i2) => {
+        const fillWithGreen = (comb) => {
             setS(prev => {
                 const updated = [...prev];
-                updated[i0] = wonStyle;
-                updated[i1] = wonStyle;
-                updated[i2] = wonStyle;
+                updated[comb[0]] = wonStyle;
+                updated[comb[1]] = wonStyle;
+                updated[comb[2]] = wonStyle;
                 return updated;
             });
         }
 
-        const chnageWhoWon = (whoWon) => {
+        const changeWhoWon = (whoWon) => {
             setGameFinished(true);
             if (whoWon == 0) {
                 setWhoPlays("1st Player Won");
@@ -53,11 +57,20 @@ function TicTacToe() {
         }
 
         const checkIfDone = () => {
-            if (boxes.every(p => p !== "")) chnageWhoWon(2);
+            const xCombination = winningCombinations.find(b => b.every(index => boxes[index] === "X"));
+            const oCombination = winningCombinations.find(b => b.every(index => boxes[index] === "O"));
+            if (xCombination) {
+                changeWhoWon(0);
+                fillWithGreen(xCombination);
+            }
+            else if (oCombination) {
+                changeWhoWon(1);
+                fillWithGreen(oCombination);
+            }
 
-            else if (boxes[0] == boxes[1] && boxes[1] == boxes[2] && boxes[0] == "X") {
-                chnageWhoWon(1);
-                fillWithGreen(0, 1, 2);
+            if (boxes.every(p => p !== "")) {
+                changeWhoWon(2);
+                return;
             }
         }
 
@@ -93,28 +106,17 @@ function TicTacToe() {
             return updated;
         });
 
-        if (firstPlayer) {
-            setBoxes(p => {
-                const updated = [...p];
-                updated[index] = "X";
-                return updated;
-            });
-        }
-
-        else {
-            setBoxes(p => {
-                const updated = [...p];
-                updated[index] = "O";
-                return updated;
-            });
-        }
-
+        const letter = firstPlayer ? "X" : "O";
+        setBoxes(p => {
+            const updated = [...p];
+            updated[index] = letter;
+            return updated;
+        });
         setFirstPLayer(p => !p);
     }
 
     function playAgain() {
         setBoxes(Array(9).fill(""));
-
         setS(Array(9).fill(c));
 
         setGameFinished(false);
