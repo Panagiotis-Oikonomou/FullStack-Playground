@@ -9,33 +9,13 @@ function TicTacToe() {
     const [gameFinished, setGameFinished] = useState(false);
     const [whoPlays, setWhoPlays] = useState("1st Player Playing");
     const [firstPlayer, setFirstPLayer] = useState(true);
-    const [firstPlayerWon, setFirstPLayerWon] = useState(true);
 
     const cB = { cursor: "default" };
     const c = { cursor: "pointer" };
-    const [s, setS] = useState({
-        b1: c,
-        b2: c,
-        b3: c,
-        b4: c,
-        b5: c,
-        b6: c,
-        b7: c,
-        b8: c,
-        b9: c
-    });
+    const wonStyle = { backgroundColor: "green", cursor: "default" };
+    const [s, setS] = useState([c, c, c, c, c, c, c, c, c]);
 
-    const [boxes, setBoxes] = useState({
-        b1: "",
-        b2: "",
-        b3: "",
-        b4: "",
-        b5: "",
-        b6: "",
-        b7: "",
-        b8: "",
-        b9: ""
-    });
+    const [boxes, setBoxes] = useState(["", "", "", "", "", "", "", "", ""]);
 
     useEffect(() => { document.title = "Tic-Tac-Toe" }, []);
 
@@ -49,22 +29,40 @@ function TicTacToe() {
     }, [firstPlayer]);
 
     useEffect(() => {
-        const checkIfDone = () => {
-            if (Object.values(boxes).every(p => p !== "")) {
-                setGameFinished(true);
-                if (firstPlayerWon) {
-                    setWhoPlays("1st Player Won");
-                    setFirstScore(p => p + 1);
-                }
+        const fillWithGreen = (i0, i1, i2) => {
+            setS(prev => {
+                const updated = [...prev];
+                updated[i0] = wonStyle;
+                updated[i1] = wonStyle;
+                updated[i2] = wonStyle;
+                return updated;
+            });
+        }
 
-                else {
-                    setWhoPlays("2nd Player Won");
-                    setSecondScore(p => p + 1);
-                }
+        const chnageWhoWon = (whoWon) => {
+            setGameFinished(true);
+            if (whoWon == 0) {
+                setWhoPlays("1st Player Won");
+                setFirstScore(p => p + 1);
+            }
+            else if (whoWon == 1) {
+                setWhoPlays("2nd Player Won");
+                setSecondScore(p => p + 1);
+            }
+            else setWhoPlays("It's a Tie");
+        }
+
+        const checkIfDone = () => {
+            if (boxes.every(p => p !== "")) chnageWhoWon(2);
+
+            else if (boxes[0] == boxes[1] && boxes[1] == boxes[2] && boxes[0] == "X") {
+                chnageWhoWon(1);
+                fillWithGreen(0, 1, 2);
             }
         }
+
         checkIfDone();
-    }, [boxes, firstPlayerWon]);
+    }, [boxes]);
 
     function saveScore() {
         if (firstScore == 0 && secondScore == 0) return;
@@ -86,48 +84,42 @@ function TicTacToe() {
         localStorage.removeItem("secondScore");
     }
 
-    function play(name) {
-        if (boxes[name] == "X" || boxes[name] == "o") return;
+    function play(index) {
+        if (boxes[index] !== "" || gameFinished) return;
 
-        setS(p => ({ ...p, [name]: cB }));
+        setS(p => {
+            const updated = [...p];
+            updated[index] = cB;
+            return updated;
+        });
 
         if (firstPlayer) {
-            setBoxes(p => ({ ...p, [name]: "X" }));
-
+            setBoxes(p => {
+                const updated = [...p];
+                updated[index] = "X";
+                return updated;
+            });
         }
 
         else {
-            setBoxes(p => ({ ...p, [name]: "O" }));
-
+            setBoxes(p => {
+                const updated = [...p];
+                updated[index] = "O";
+                return updated;
+            });
         }
 
         setFirstPLayer(p => !p);
     }
 
     function playAgain() {
-        setBoxes({
-            b1: "",
-            b2: "",
-            b3: "",
-            b4: "",
-            b5: "",
-            b6: "",
-            b7: "",
-            b8: "",
-            b9: ""
-        });
+        setBoxes(Array(9).fill(""));
 
-        setS({
-            b1: c,
-            b2: c,
-            b3: c,
-            b4: c,
-            b5: c,
-            b6: c,
-            b7: c,
-            b8: c,
-            b9: c
-        });
+        setS(Array(9).fill(c));
+
+        setGameFinished(false);
+        setFirstPLayer(true);
+        setWhoPlays("1st Player Playing");
     }
 
     return (
@@ -152,32 +144,32 @@ function TicTacToe() {
                         {gameFinished && <button onClick={playAgain}>Play Again!</button>}
                     </div>
                     <div className={style.right}>
-                        <div className={style.box} style={s.b1} onClick={() => play("b1")}>
-                            <div className={style.insideBox}>{boxes.b1}</div>
+                        <div className={style.box} style={s[0]} onClick={() => play(0)}>
+                            <div className={style.insideBox}>{boxes[0]}</div>
                         </div>
-                        <div className={style.box} style={s.b2} onClick={() => play("b2")}>
-                            <div className={style.insideBox}>{boxes.b2}</div>
+                        <div className={style.box} style={s[1]} onClick={() => play(1)}>
+                            <div className={style.insideBox}>{boxes[1]}</div>
                         </div>
-                        <div className={style.box} style={s.b3} onClick={() => play("b3")}>
-                            <div className={style.insideBox}>{boxes.b3}</div>
+                        <div className={style.box} style={s[2]} onClick={() => play(2)}>
+                            <div className={style.insideBox}>{boxes[2]}</div>
                         </div>
-                        <div className={style.box} style={s.b4} onClick={() => play("b4")}>
-                            <div className={style.insideBox}>{boxes.b4}</div>
+                        <div className={style.box} style={s[3]} onClick={() => play(3)}>
+                            <div className={style.insideBox}>{boxes[3]}</div>
                         </div>
-                        <div className={style.box} style={s.b5} onClick={() => play("b5")}>
-                            <div className={style.insideBox}>{boxes.b5}</div>
+                        <div className={style.box} style={s[4]} onClick={() => play(4)}>
+                            <div className={style.insideBox}>{boxes[4]}</div>
                         </div>
-                        <div className={style.box} style={s.b6} onClick={() => play("b6")}>
-                            <div className={style.insideBox}>{boxes.b6}</div>
+                        <div className={style.box} style={s[5]} onClick={() => play(5)}>
+                            <div className={style.insideBox}>{boxes[5]}</div>
                         </div>
-                        <div className={style.box} style={s.b7} onClick={() => play("b7")}>
-                            <div className={style.insideBox}>{boxes.b7}</div>
+                        <div className={style.box} style={s[6]} onClick={() => play(6)}>
+                            <div className={style.insideBox}>{boxes[6]}</div>
                         </div>
-                        <div className={style.box} style={s.b8} onClick={() => play("b8")}>
-                            <div className={style.insideBox}>{boxes.b8}</div>
+                        <div className={style.box} style={s[7]} onClick={() => play(7)}>
+                            <div className={style.insideBox}>{boxes[7]}</div>
                         </div>
-                        <div className={style.box} style={s.b9} onClick={() => play("b9")}>
-                            <div className={style.insideBox}>{boxes.b9}</div>
+                        <div className={style.box} style={s[8]} onClick={() => play(8)}>
+                            <div className={style.insideBox}>{boxes[8]}</div>
                         </div>
                     </div>
                 </div>
