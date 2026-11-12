@@ -1,47 +1,55 @@
 import style from "./SecretSanta.module.css";
-import {Trash2} from "lucide-react";
+import axios from "../../api/axios";
+import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function SecretSanta() {
-    const [recipients, setRecipients] = useState([{from:"1", to:"2", index:0}, {from:"2", to:"2", index:1}, {from:"3", to:"2", index:2}, {from:"4", to:"2", index:3}, {from:"5", to:"2", index:4}, {from:"6", to:"2", index:5}, {from:"7", to:"2", index:6}, {from:"8", to:"2", index:7}, {from:"9", to:"2", index:8}, {from:"10", to:"2", index:9}]);
     const [emails, setEmails] = useState([]);
     const [writtenSenders, setWrittenSenders] = useState("");
     const [readyToAdd, setReadyToAdd] = useState(false);
-    const [globalIndex, setGlobalIndex] = useState(0);
     const [emailError, setEmailError] = useState("");
 
     useEffect(() => { document.title = "Secret Santa" }, []);
 
-    function removeEmail(index){
-        // setRecipients(r => r.filter(e => e.index != index));
-        setEmails(r => r.filter((_,ind) => ind !== index));
+    function removeEmail(index) {
+        setEmails(r => r.filter((_, ind) => ind !== index));
     }
 
-    function checkSenders(value){
+    function checkSenders(value) {
         setWrittenSenders(value);
-        if(value == "") {
+        if (value == "") {
             setEmailError("")
             return;
         }
-        const regex = /^(?!.*\.\.)[^\s@,]+@[^\s@,]+\.[^\s@,]+(,\s*[^\s@,]+@[^\s@,]+\.[^\s@,]+)*$/;
+        const regex = /^(?!.*\.\.)[^\s@,:]+@[^\s@,:]+\.[^\s@,:]+:[a-zA-Z]+(,\s*[^\s@,:]+@[^\s@,:]+\.[^\s@,:]+:[a-zA-Z]+)*$/;
 
         regex.test(value) ? setEmailError("") : setEmailError("There is a problem with the structure of your emails");
 
         setReadyToAdd(regex.test(value));
     }
 
-    function addTheEmails(){
+    function addTheEmails() {
         setEmails(r => {
             const updated = [...r];
             const e = writtenSenders.split(",");
             e.forEach(em => {
                 let newEmail = true;
-                updated.forEach(cE => {if(cE == em) newEmail = false;} );
+                updated.forEach(cE => { if (cE == em) newEmail = false; });
 
-                if(newEmail) updated.push(em);
+                if (newEmail) updated.push(em);
             });
             return updated;
         });
+    }
+
+    function sendTheEmails(){
+        try{
+            axios.post("/secret-santa", emails);
+            setEmails([]);
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     return (
@@ -52,21 +60,16 @@ function SecretSanta() {
 
             <div className={style.all}>
                 <div className={style.recipients}>
-                    <textarea placeholder="Write the transmitters seperating with a comma (e.g from@email,from2@email)" name="senders" value={writtenSenders} onChange={(e) => checkSenders(e.target.value)}></textarea>
+                    <textarea placeholder="Write the emails and then the name of the person that has that email seperating them with a : and seperate them all with a comma (e.g email@email:panos,email2@email:someone)" name="senders" value={writtenSenders} onChange={(e) => checkSenders(e.target.value)}></textarea>
                     <div className={style.emailError}>{emailError}</div>
                     <button disabled={!readyToAdd} onClick={addTheEmails}>Add the emails</button>
-                    <div className={style.manageRecipients}>
-                        {/* {recipients.map((row) => (
-                                <div className={style.insideManageRecipients} key={row.index}>{row.from} <Trash2 onClick={() => removeEmail(row.index)} className={style.trash}/></div>
-                            ))} */}
-                        {emails.map((value, index) => (
-                                <div className={style.insideManageRecipients} key={index}>{value} <Trash2 onClick={() => removeEmail(index)} className={style.trash}/></div>
-                            ))}
-                    </div>
+                    <button disabled={emails.length == 0} onClick={sendTheEmails}>Send the invitations</button>
                 </div>
 
-                <div className={style.text}>
-                    <textarea></textarea>
+                <div className={style.manageRecipients}>
+                    {emails.map((value, index) => (
+                        <div className={style.insideManageRecipients} key={index}>{value} <Trash2 onClick={() => removeEmail(index)} className={style.trash} /></div>
+                    ))}
                 </div>
             </div>
         </div>
