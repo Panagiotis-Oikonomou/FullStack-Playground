@@ -2,14 +2,18 @@ import style from "./SecretSanta.module.css";
 import axios from "../../api/axios";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import resetTimer from "../../utils/resetTimer";
 
 function SecretSanta() {
     const [emails, setEmails] = useState([]);
     const [writtenSenders, setWrittenSenders] = useState("");
     const [readyToAdd, setReadyToAdd] = useState(false);
     const [emailError, setEmailError] = useState("");
+    const [successfullSend, setSuccessfullSend] = useState("");
 
     useEffect(() => { document.title = "Secret Santa" }, []);
+
+    useEffect(() => { resetTimer(successfullSend, setSuccessfullSend); }, [successfullSend]);
 
     function removeEmail(index) {
         setEmails(r => r.filter((_, ind) => ind !== index));
@@ -42,12 +46,13 @@ function SecretSanta() {
         });
     }
 
-    function sendTheEmails(){
-        try{
+    function sendTheEmails() {
+        try {
             axios.post("/secret-santa", emails);
+            setSuccessfullSend("The emails have been sent");
             setEmails([]);
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
     }
@@ -61,9 +66,13 @@ function SecretSanta() {
             <div className={style.all}>
                 <div className={style.recipients}>
                     <textarea placeholder="Write the emails and then the name of the person that has that email seperating them with a : and seperate them all with a comma (e.g email@email:panos,email2@email:someone)" name="senders" value={writtenSenders} onChange={(e) => checkSenders(e.target.value)}></textarea>
-                    <div className={style.emailError}>{emailError}</div>
+
+                    <div className={emailError == "" ? "" : style.emailError}>{emailError}</div>
+
                     <button disabled={!readyToAdd} onClick={addTheEmails}>Add the emails</button>
                     <button disabled={emails.length == 0} onClick={sendTheEmails}>Send the invitations</button>
+                    
+                    <div className={successfullSend == "" ? "" : style.successfullSend}>{successfullSend}</div>
                 </div>
 
                 <div className={style.manageRecipients}>
