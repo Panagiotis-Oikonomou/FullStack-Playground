@@ -10,11 +10,25 @@ exports.secretSanta = async (req, res) => {
 
         emails.forEach(element => {
             const emailName = element.split(":");
-            names.push(emailName[1]);
-            emailsNames.push({email: emailName[0], name: emailName[1]}); 
+            names.push({name: emailName[1], to: ""});
+            emailsNames.push({email: emailName[0], name: emailName[1], taken: false}); 
         });
+
+        names.forEach(r => {
+            while(true){
+                const index = Math.floor(Math.random() * names.length);
+                const all = emailsNames[index];
+                if(r.name != all.name && all.taken != true){
+                    all.taken = true;
+                    r.to = all.email;
+                    break;
+                }
+            }
+        });
+
+        console.log(names);
         
-        res.status(200).json({ status: 'success', message: 'Email sent successfully' });
+        res.status(200);
     }
     catch (err) {
         console.error('Error sending email:', err);
