@@ -70,7 +70,7 @@ function SecretSanta() {
                     <div className={emailError == "" ? "" : style.emailError}>{emailError}</div>
 
                     <button disabled={!readyToAdd} onClick={addTheEmails}>Add the emails</button>
-                    <button disabled={emails.length == 0} onClick={sendTheEmails}>Send the invitations</button>
+                    <button disabled={emails.length <= 1} onClick={sendTheEmails}>Send the invitations</button>
                     
                     <div className={successfullSend == "" ? "" : style.successfullSend}>{successfullSend}</div>
                 </div>
