@@ -16,27 +16,29 @@ function Home() {
 
             <div className={style.all}>
                 <div className={style.other}>
-                    <Link to="/rock_paper_scissors">
-                        <div className={style.eachOther}>
-                            <img src={rockPaperScissors} />
-                        </div>
-                    </Link>
-                    <div className={style.projectTitle}>Rock-Paper-Scissors</div>
-                </div>
-
-                <div className={style.other}>
-                    <Link to="/tictactoe">
-                        <div className={style.eachOther}>
-                            <img src={ticTacToe} />
-                        </div>
+                    <Link to="/rock_paper_scissors" className={style.insideOther}>
+                            <div className={style.eachOther}>
+                                <img src={rockPaperScissors} />
+                            </div>
+                            <div className={style.projectTitle}>Rock-Paper-Scissors</div>
                     </Link>
                 </div>
 
                 <div className={style.other}>
-                    <Link to="/secret-santa">
-                        <div className={style.eachOther}>
-                            <img src={secretSanta} />
-                        </div>
+                    <Link to="/tictactoe" className={style.insideOther}>
+                            <div className={style.eachOther}>
+                                <img src={ticTacToe} />
+                            </div>
+                            <div className={style.projectTitle}>Tic-Tac-Toe</div>
+                    </Link>
+                </div>
+
+                <div className={style.other}>
+                    <Link to="/secret-santa" className={style.insideOther}>
+                            <div className={style.eachOther}>
+                                <img src={secretSanta} />
+                            </div>
+                            <div className={style.projectTitle}>Secret Santa</div>
                     </Link>
                 </div>
 
