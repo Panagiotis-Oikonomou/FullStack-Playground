@@ -132,10 +132,10 @@ function TicTacToe() {
 
             <div className={style.all}>
                 <div className={style.status}>
-                    <div>1st player Score: {firstScore}</div>
-                    <div>2nd player Score: {secondScore}</div>
-                    <div>1st player Saved Score: {firstSavedScore}</div>
-                    <div>2nd player Saved Score: {secondSavedScore}</div>
+                    <div>~1st player Score: {firstScore}</div>
+                    <div>~2nd player Score: {secondScore}</div>
+                    <div>~1st player Saved Score: {firstSavedScore}</div>
+                    <div>~2nd player Saved Score: {secondSavedScore}</div>
                     <button onClick={() => { setFirstScore(0); setSecondScore(0); }}>Delete Current Score</button>
                     <button onClick={saveScore}>Save Score</button>
                     <button onClick={deleteSavedScore}>Delete Saved Score</button>

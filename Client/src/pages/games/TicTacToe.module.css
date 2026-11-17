@@ -9,7 +9,6 @@
   color: black;
   text-align: center;
   width: 100%;
-  margin-bottom: 20px;
 }
 
 .all {
@@ -17,17 +16,18 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 100px;
-  flex: 1;
+  gap: 20px;
 }
 
 .status {
   display: flex;
   width: 100%;
-  justify-content: center;
   align-items: center;
-  font-size: 1.4em;
-  gap: 20px;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+  font-size: 1.1em;
+  gap: 10px;
 }
 
 .status button,
@@ -35,33 +35,34 @@
   font-size: 0.6em;
   background-color: black;
   color: white;
-  height: 2em;
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 }
 
-button:hover {
-  background-color: blue;
-  cursor: pointer;
-}
-
 .game {
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  height: 70vh;
+  gap: 20px;
 }
 
 .left {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 2em;
-  width: 30%;
+  font-size: 1.5em;
+  width: 100%;
+  height: 10%;
+  gap: 5px;
 }
 
-.left button{
+.left p {
+  margin: 0px;
+}
+
+.left button {
   font-size: 1em;
 }
 
@@ -70,20 +71,15 @@ button:hover {
   width: 100%;
   height: 100%;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-auto-rows: 15%;
   gap: 5px;
 }
 
-.box{
+.box {
   width: 100%;
   height: 100%;
   transition: transform 0.3s ease, filter 0.3s ease;
   background-color: rgb(116, 103, 103);
-}
-
-.box:hover{
-  transform: scale(1.05);
-  cursor: pointer;
 }
 
 .insideBox {
@@ -91,5 +87,79 @@ button:hover {
   align-items: center;
   justify-content: center;
   height: 100%;
-  font-size: 10em;
+  font-size: 7em;
+}
+
+button:hover {
+  background-color: blue;
+  cursor: pointer;
+}
+
+.box:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+  .status {
+    font-size: 1.4em;
+  }
+
+  .status button,
+  .left button {
+    font-size: 0.8em;
+  }
+
+  .left {
+    font-size: 1.8em;
+  }
+
+  .right {
+    grid-auto-rows: 25%;
+  }
+
+  .insideBox {
+    font-size: 10em;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .right {
+    grid-auto-rows: 30%;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .right {
+    grid-auto-rows: 32%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .all {
+    gap: 50px;
+  }
+
+  .status {
+    justify-content: center;
+    font-size: 1.4em;
+    gap: 20px;
+  }
+
+  .game {
+    flex-direction: row;
+  }
+
+  .left {
+    justify-content: center;
+    font-size: 2em;
+    width: 30%;
+    height: 70%;
+  }
+
+  .right {
+    width: 70%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
 }
