@@ -2,6 +2,7 @@ import style from "./Home.module.css";
 import rockPaperScissors from "../assets/images/rockPaperScissors/Rock-paper-scissors.png";
 import ticTacToe from "../assets/images/ticTacToe/ticTacToe.png";
 import secretSanta from "../assets/images/secretSanta/secretSanta.png";
+import toDoList from "../assets/images/toDoList/toDoList.png";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -42,6 +43,14 @@ function Home() {
                     </Link>
                 </div>
 
+                <div className={style.other}>
+                    <Link to="/to-do-list" className={style.insideOther}>
+                            <div className={style.eachOther}>
+                                <img src={toDoList} />
+                            </div>
+                            <div className={style.projectTitle}>To Do List</div>
+                    </Link>
+                </div>
             </div>
         </div>
     )
