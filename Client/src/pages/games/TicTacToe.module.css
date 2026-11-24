@@ -91,7 +91,7 @@
   font-size: 7em;
 }
 
-button:hover {
+.container button:hover {
   background-color: blue;
   cursor: pointer;
 }

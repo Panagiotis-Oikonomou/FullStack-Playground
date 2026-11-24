@@ -4,133 +4,119 @@ import { Trash2, EditIcon, Filter } from "lucide-react";
 import Swal from "sweetalert2";
 
 function ToDoList() {
-    const ll = "dcbaasas";
-    const [pp, setPp] = useState([{ task: "hahah", priority: "Low" }, { task: "smsm", priority: "Low" }, { task: "smsm", priority: "high" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "high" }, { task: "hahah", priority: "high" }, { task: "hahah", priority: "high" }]);
-    const toDoList = false;
+  const [pp, setPp] = useState([{ task: "hahah", priority: "Low", change: false, check: true }, { task: "smsm", priority: "Low", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }]);
+  const toDoList = false;
 
-    useEffect(() => { document.title = "To Do List" }, []);
+  useEffect(() => { document.title = "To Do List" }, []);
 
-    useEffect(() => {
-        const mergeSort = (word) => {
+  function removeItem(index) {
+    Swal.fire({
+      titleText: "Are you sure?",
+      theme: "dark",
+      icon: "question",
+      heightAuto: false,
+      allowOutsideClick: false,
+      draggable: true,
+      showCancelButton: true
+    }).then((result) => {
+      if (result.isConfirmed) setPp(r => r.filter((_, i) => i !== index))
+    });
+  }
 
-            console.log(word.length, word);
+  function changeEdit(val, index) {
+    setPp(r => r.map((item, i) => i === index ? { ...item, change: val } : item));
+  }
 
-            if (word.length <= 1) return word;
+  function changeTask(index, value) {
+    if (value.length < 1) return;
+    setPp(r => r.map((item, i) => i === index ? { ...item, task: value } : item));
+  }
 
-            let mid = Math.floor((0 + word.length) / 2);
-            console.log("Mid", mid);
-            console.log("Left", word.slice(0, mid));
-            console.log("Right", word.slice(mid));
-            // return;
+  function changeCheck(index) {
+    setPp(r => r.map((item, i) => i === index ? { ...item, check: !item.check } : item));
+  }
 
-            let left = mergeSort(word.slice(0, mid));
-            let right = mergeSort(word.slice(mid));
-            return left + right;
-        }
-        const fun = () => {
-            // const f = ll.slice(ll.length / 2, ll.length);
-            // console.log(f.slice(0, 1));
-            // console.log(f.slice(1, 2));
-            // console.log(ll.slice(0, 2) > ll.slice(2, 4));
-            // const l = f.slice(0, 1);   
-            // const r = f.slice(1, 2);
-            // if(l >= r) console.log( r + l);
-            // else  console.log( l + r);
-            // console.log(f.slice(1, 2) < f.slice(0, 1));
-            console.log("Merge", mergeSort(ll));
-        }
-        // fun();
-    }, []);
+  useEffect(() => {
+    console.log(pp)
+  }, [pp])
 
-    function removeItem(index) {
-        Swal.fire({
-            titleText: "Are you sure?",
-            theme: "dark",
-            icon: "question",
-            heightAuto: false,
-            allowOutsideClick: false,
-            draggable: true,
-            showCancelButton: true
-        }).then((result) => {
-            if(result.isConfirmed) setPp(r => r.filter((_, i) => i !== index))
-        });
-    }
+  return (
+    <div className={style.container}>
+      <div className={style.title}>
+        {toDoList ? (
+          <h1>To Do List</h1>
+        ) : (
+          <h1>List</h1>
+        )}
+      </div>
 
-    return (
-        <div className={style.container}>
-            <div className={style.title}>
+      <div className={style.all}>
+        <div className={style.list}>
+          <div className={style.listTitle}>New List</div>
+          <div className={style.tableContainer}>
+            <table >
+              <thead>
                 {toDoList ? (
-                    <h1>To Do List</h1>
+                  <tr>
+                    <th style={{ width: "50%" }}>Task</th>
+                    <th style={{ width: "30%" }}>Priority</th>
+                    <th style={{ width: "20%" }}>Utilities</th>
+                  </tr>
                 ) : (
-                    <h1>List</h1>
+                  <tr>
+                    <th style={{ width: "50%" }}>Task</th>
+                    <th style={{ width: "30%" }}>Utilities</th>
+                  </tr>
                 )}
-            </div>
-
-            <div className={style.all}>
-                <div className={style.list}>
-                    <div className={style.listTitle}>New List</div>
-                    <div className={style.tableContainer}>
-                        <table >
-                            <thead>
-                                {toDoList ? (
-                                    <tr>
-                                        <th style={{ width: "50%" }}>Task</th>
-                                        <th style={{ width: "30%" }}>Priority</th>
-                                        <th style={{ width: "20%" }}>Utilities</th>
-                                    </tr>
-                                ) : (
-
-                                    <tr>
-                                        <th style={{ width: "50%" }}>Task</th>
-                                        {/* <th style={{ width: "0%" }}>Task</th> */}
-                                        <th style={{ width: "30%" }}>Utilities</th>
-                                    </tr>
-                                )}
-                            </thead>
-                            <tbody>
-                                {pp.map((value, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <div className={style.task}>
-                                                {value.task}
-                                            </div>
-                                        </td>
-                                        {toDoList && (
-                                            <td>
-                                                <div className={style.priority}>
-                                                    {value.priority}
-                                                </div>
-                                            </td>
-
-                                        )}
-                                        <td>
-                                            <div className={style.icons}>
-                                                <input type="checkbox" name="toDo1" title="Done" />
-                                                <span title="Edit"> <EditIcon /> </span>
-                                                <span title="Remove"> <Trash2 onClick={() => removeItem(index)} /> </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className={style.bottom}>
-                        {toDoList ? (
-                            <button>New Task</button>
-                        ) : (
-                            <button>New Item</button>
-                        )}
-                        <div className={style.bottomRight}>
-                            <button>Save Changes</button>
-                            <span title="Filter"><Filter /></span>
+              </thead>
+              <tbody>
+                {pp.map((value, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <div className={style.task}>
+                          <input type="text" value={value.task} disabled={!value.change} onChange={(e) => changeTask(index, e.target.value)} onBlur={() => changeEdit(false, index)} />
                         </div>
-                    </div>
-                </div>
+                      </td>
+                      {toDoList && (
+                        <td>
+                          <div className={style.priority}>
+                            {value.priority}
+                          </div>
+                        </td>
+
+                      )}
+                      <td>
+                        <div className={style.icons}>
+                          <input type="checkbox" name="toDo1" title="Done" value={value.check} checked={value.check} onChange={() => changeCheck(index)} />
+                          <button className={style.iconButton} title="Edit" disabled={value.check} onClick={() => changeEdit(true, index)}>
+                            <EditIcon size={25} />
+                          </button>
+                          <span title="Remove"> <Trash2 onClick={() => removeItem(index)} /> </span>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className={style.bottom}>
+            {toDoList ? (
+              <button>New Task</button>
+            ) : (
+              <button>New Item</button>
+            )}
+            <div className={style.bottomRight}>
+              <button>Save Changes</button>
+              <span title="Filter"><Filter /></span>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default ToDoList;

@@ -110,7 +110,7 @@
   width: 30%;
 }
 
-button:hover {
+.container button:hover {
   background-color: blue;
   cursor: pointer;
 }
