@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import style from "./ToDoList.module.css";
 import { Trash2, EditIcon, Filter } from "lucide-react";
+import Swal from "sweetalert2";
 
 function ToDoList() {
     const ll = "dcbaasas";
-    const pp = [{ task: "hahah", priority: "Low" }, { task: "smsm", priority: "Low" }, { task: "smsm", priority: "high" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "high" }, { task: "hahah", priority: "high" }, { task: "hahah", priority: "high" }];
+    const [pp, setPp] = useState([{ task: "hahah", priority: "Low" }, { task: "smsm", priority: "Low" }, { task: "smsm", priority: "high" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "urgent" }, { task: "smsm", priority: "high" }, { task: "hahah", priority: "high" }, { task: "hahah", priority: "high" }]);
     const toDoList = false;
 
     useEffect(() => { document.title = "To Do List" }, []);
@@ -40,6 +41,20 @@ function ToDoList() {
         }
         // fun();
     }, []);
+
+    function removeItem(index) {
+        Swal.fire({
+            titleText: "Are you sure?",
+            theme: "dark",
+            icon: "question",
+            heightAuto: false,
+            allowOutsideClick: false,
+            draggable: true,
+            showCancelButton: true
+        }).then((result) => {
+            if(result.isConfirmed) setPp(r => r.filter((_, i) => i !== index))
+        });
+    }
 
     return (
         <div className={style.container}>
@@ -92,7 +107,7 @@ function ToDoList() {
                                             <div className={style.icons}>
                                                 <input type="checkbox" name="toDo1" title="Done" />
                                                 <span title="Edit"> <EditIcon /> </span>
-                                                <span title="Remove"> <Trash2 /> </span>
+                                                <span title="Remove"> <Trash2 onClick={() => removeItem(index)} /> </span>
                                             </div>
                                         </td>
                                     </tr>
