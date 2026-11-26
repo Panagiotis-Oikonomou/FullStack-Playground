@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 function ToDoList() {
   const [pp, setPp] = useState([{ task: "hahah", priority: "Low", change: false, check: true }, { task: "smsm", priority: "Low", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }]);
-  const toDoList = false;
+  const toDoList = true;
   const [newTask, setNewTask] = useState(true);
   const [task, setTask] = useState({ name: "", priority: "" });
 
@@ -45,6 +45,11 @@ function ToDoList() {
   function checkNewTask(e) {
     const { name, value } = e.target;
     setTask(prev => ({ ...prev, [name]: value }));
+  }
+
+  function goBack(){
+    setNewTask(true);
+    setTask(p => ({name: "", priority: ""}));
   }
 
   useEffect(() => {
@@ -143,7 +148,7 @@ function ToDoList() {
                 </select>
               }
               <button onClick={() => setNewTask(true)} disabled={task.name.length == 0}>Create Task</button>
-              <button onClick={() => setNewTask(true)}>Go Back</button>
+              <button onClick={goBack}>Go Back</button>
             </div>
           </div>
         )}
