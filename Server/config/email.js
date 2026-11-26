@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN
-    }
+    },
+    connectionTimeout: 30000,
 });
 
 module.exports = transporter;

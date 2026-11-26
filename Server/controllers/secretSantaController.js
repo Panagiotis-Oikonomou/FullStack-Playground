@@ -24,24 +24,19 @@ exports.secretSanta = async (req, res) => {
             }
         });
 
-        transporter.verify((error, success) => {
-            if (error) {
-                console.log("Connection error:", error);
-            } else {
-                console.log("Server is ready to send emails!");
-            }
-        });
+        await transporter.verify();
 
-        names.forEach(async (element) => {
+        await Promise.all(
+        names.map(async (element) => {
             const mailOptions = {
                 from: process.env.GMAIL_USER,
                 to: `${element.to}`,
                 subject: "Secret Santa",
-                text: `'Ετυχες τον/την ${element.name} μην το πεις σε κανέναν γιατί θα το μάθουμε και δεν θες να δεις την κατάληξη αυτού. \nΚαλά δώρα;).`
+                text: `'Ετυχες τον/την ${element.name} μην το πεις σε κανέναν . \nΚαλά δώρα;).`
             };
             const info = await transporter.sendMail(mailOptions);
             console.log('Email sent:', info.response);
-        });
+        }));
         res.status(200);
     }
     catch (err) {
