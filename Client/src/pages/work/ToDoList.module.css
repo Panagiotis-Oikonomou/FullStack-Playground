@@ -34,7 +34,7 @@
   padding: 20px;
 }
 
-.listTitle{
+.listTitle {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -64,7 +64,6 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  /* font-size: 1.1em; */
 }
 
 .icons {
@@ -75,27 +74,44 @@
   gap: 5px;
 }
 
-.bottom{
+.bottom {
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin: auto;
 }
 
-.bottom button{
+.bottom button {
   background-color: black;
   color: white;
   border-radius: 20px;
   font-size: 1.1em;
 }
 
-.bottomRight{
+.bottomRight {
   display: flex;
   gap: 10px;
   cursor: pointer;
 }
 
-.bottom button:hover{
+.newTask {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70%;
+  gap: 30px;
+}
+
+.newTask input[type="text"],
+.newTask input[type="select"],
+.newTask button {
+  width: 50%;
+}
+
+.bottom button:hover,
+.newTask button:hover {
   background-color: rgb(51, 50, 50);
 }
 
@@ -121,19 +137,19 @@
 }
 
 .iconButton {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    color: inherit;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .iconButton:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .icons:hover {
@@ -168,7 +184,7 @@
   transform: rotate(45deg);
 }
 
-.tableContainer input[type="text"]{
+.tableContainer input[type="text"] {
   width: 100%;
   box-sizing: border-box;
   border: none;
