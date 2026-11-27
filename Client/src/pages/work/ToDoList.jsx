@@ -84,14 +84,14 @@ function ToDoList() {
                   {tasks.length == 0 && <tr><td colSpan={3} style={{ height: "150px" }}><div className={style.noItems}>No Items</div></td></tr>}
                   {tasks.map((value, index) => {
                     return (
-                      <tr key={index}>
+                      <tr key={index} className={value.check ? (toDoList ? style.completedOne : style.completedTwo) : ""}>
                         <td>
                           <div className={style.task} onBlur={(e) => {
                             if (!e.currentTarget.contains(e.relatedTarget)) {
                               changeEdit(false, index, "change");
                             }
                           }}>
-                            <input type="text" value={value.task} disabled={!value.change} onChange={(e) => changeEdit(e.target.value, index, "task")} />
+                            <span style={{}}><input type="text" value={value.task} disabled={!value.change} onChange={(e) => changeEdit(e.target.value, index, "task")} /></span>
                           </div>
                         </td>
                         {toDoList && (

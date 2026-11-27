@@ -113,6 +113,27 @@
   height: 100%;
 }
 
+.completedOne, .completedTwo {
+  text-decoration: line-through;
+}
+
+.completedOne td:nth-child(-n+2),
+.completedTwo td:nth-child(-n+1) {
+  position: relative;
+}
+
+.completedOne td:nth-child(-n+2)::after,
+.completedTwo td:nth-child(-n+1)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background-color: black;
+  pointer-events: none;
+}
+
 .newTask input[type="text"],
 .newTask select,
 .newTask button {
