@@ -25,21 +25,10 @@ function ToDoList() {
     });
   }
 
-  function changeEdit(val, index) {
-    setTasks(r => r.map((item, i) => i === index ? { ...item, change: val } : item));
-  }
-
-  function changePriority(val, index) {
-    setTasks(r => r.map((item, i) => i === index ? { ...item, priority: val } : item));
-  }
-
-  function changeTask(index, value) {
-    if (value.length < 1) return;
-    setTasks(r => r.map((item, i) => i === index ? { ...item, task: value } : item));
-  }
-
-  function changeCheck(index) {
-    setTasks(r => r.map((item, i) => i === index ? { ...item, check: !item.check } : item));
+  function changeEdit(val, index, name) {
+    if (name == "task" && val.length < 1) return;
+    if (name == "check") setTasks(r => r.map((item, i) => i === index ? { ...item, check: !item.check, change: false } : item));
+    else setTasks(r => r.map((item, i) => i === index ? { ...item, [name]: val } : item));
   }
 
   function checkNewTask(e) {
@@ -60,10 +49,6 @@ function ToDoList() {
     });
     goBack();
   }
-
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks])
 
   return (
     <div className={style.container}>
@@ -101,14 +86,18 @@ function ToDoList() {
                     return (
                       <tr key={index}>
                         <td>
-                          <div className={style.task}>
-                            <input type="text" value={value.task} disabled={!value.change} onChange={(e) => changeTask(index, e.target.value)} onBlur={() => changeEdit(false, index)} />
+                          <div className={style.task} onBlur={(e) => {
+                            if (!e.currentTarget.contains(e.relatedTarget)) {
+                              changeEdit(false, index, "change");
+                            }
+                          }}>
+                            <input type="text" value={value.task} disabled={!value.change} onChange={(e) => changeEdit(e.target.value, index, "task")} />
                           </div>
                         </td>
                         {toDoList && (
                           <td>
                             <div className={style.priority}>
-                              <select name="priority" value={value.priority} disabled={!value.change} onChange={(e) => changePriority(e.target.value, index)} onBlur={() => changeEdit(false, index)}>
+                              <select name="priority" value={value.priority} disabled={!value.change} onChange={(e) => changeEdit(e.target.value, index, "priority")} >
                                 <option value="Urgent">Urgent</option>
                                 <option value="High">High</option>
                                 <option value="Medium">Medium</option>
@@ -119,8 +108,8 @@ function ToDoList() {
                         )}
                         <td>
                           <div className={style.icons}>
-                            <input type="checkbox" name="toDo1" title="Done" value={value.check} checked={value.check} onChange={() => changeCheck(index)} />
-                            <button className={style.iconButton} title="Edit" disabled={value.check} onClick={() => changeEdit(true, index)}>
+                            <input type="checkbox" name="toDo1" title="Done" value={value.check} checked={value.check} onChange={() => changeEdit(0, index, "check")} />
+                            <button className={style.iconButton} title="Edit" disabled={value.check} onClick={() => changeEdit(true, index, "change")}>
                               <EditIcon size={25} />
                             </button>
                             <span title="Remove"> <Trash2 onClick={() => removeItem(index)} /> </span>
@@ -149,17 +138,18 @@ function ToDoList() {
             <div className={style.listTitle}>New Item</div>
             <div className={style.newTask}>
               <input type="text" name="name" value={task.name} onChange={checkNewTask} autoFocus />
-              {toDoList && <>
-                <select onChange={checkNewTask} name="priority" value={task.priority}>
-                  <option value="" disabled>Select Priority</option>
-                  <option value="Urgent">Urgent</option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
-                </select>
-                <button onClick={createTask} disabled={task.name == "" || task.priority == ""}>Create Task</button>
-              </>
-              }
+              {toDoList && (
+                <>
+                  <select onChange={checkNewTask} name="priority" value={task.priority}>
+                    <option value="" disabled>Select Priority</option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                  <button onClick={createTask} disabled={task.name == "" || task.priority == ""}>Create Task</button>
+                </>
+              )}
               {!toDoList && <button onClick={createTask} disabled={task.name == ""}>Create Item</button>}
               <button onClick={goBack}>Go Back</button>
             </div>
