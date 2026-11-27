@@ -4,7 +4,7 @@ import { Trash2, EditIcon, Filter } from "lucide-react";
 import Swal from "sweetalert2";
 
 function ToDoList() {
-  const [pp, setPp] = useState([{ task: "hahah", priority: "Low", change: false, check: true }, { task: "smsm", priority: "Low", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "urgent", change: false, check: false }, { task: "smsm", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }, { task: "hahah", priority: "high", change: false, check: false }]);
+  const [tasks, setTasks] = useState([]);
   const toDoList = true;
   const [newTask, setNewTask] = useState(true);
   const [task, setTask] = useState({ name: "", priority: "" });
@@ -21,25 +21,25 @@ function ToDoList() {
       draggable: true,
       showCancelButton: true
     }).then((result) => {
-      if (result.isConfirmed) setPp(r => r.filter((_, i) => i !== index))
+      if (result.isConfirmed) setTasks(r => r.filter((_, i) => i !== index))
     });
   }
 
   function changeEdit(val, index) {
-    setPp(r => r.map((item, i) => i === index ? { ...item, change: val } : item));
+    setTasks(r => r.map((item, i) => i === index ? { ...item, change: val } : item));
   }
 
   function changePriority(val, index) {
-    setPp(r => r.map((item, i) => i === index ? { ...item, priority: val } : item));
+    setTasks(r => r.map((item, i) => i === index ? { ...item, priority: val } : item));
   }
 
   function changeTask(index, value) {
     if (value.length < 1) return;
-    setPp(r => r.map((item, i) => i === index ? { ...item, task: value } : item));
+    setTasks(r => r.map((item, i) => i === index ? { ...item, task: value } : item));
   }
 
   function changeCheck(index) {
-    setPp(r => r.map((item, i) => i === index ? { ...item, check: !item.check } : item));
+    setTasks(r => r.map((item, i) => i === index ? { ...item, check: !item.check } : item));
   }
 
   function checkNewTask(e) {
@@ -47,14 +47,23 @@ function ToDoList() {
     setTask(prev => ({ ...prev, [name]: value }));
   }
 
-  function goBack(){
+  function goBack() {
     setNewTask(true);
-    setTask(p => ({name: "", priority: ""}));
+    setTask(p => ({ name: "", priority: "" }));
+  }
+
+  function createTask() {
+    setTasks(prev => {
+      const updated = [...prev];
+      updated.push({ task: task.name, priority: task.priority, change: false, check: false });
+      return updated;
+    });
+    goBack();
   }
 
   useEffect(() => {
-    console.log(pp)
-  }, [pp])
+    console.log(tasks);
+  }, [tasks])
 
   return (
     <div className={style.container}>
@@ -87,7 +96,8 @@ function ToDoList() {
                   )}
                 </thead>
                 <tbody>
-                  {pp.map((value, index) => {
+                  {tasks.length == 0 && <tr><td colSpan={3} style={{ height: "150px" }}><div className={style.noItems}>No Items</div></td></tr>}
+                  {tasks.map((value, index) => {
                     return (
                       <tr key={index}>
                         <td>
@@ -138,16 +148,19 @@ function ToDoList() {
           <div className={style.list}>
             <div className={style.listTitle}>New Item</div>
             <div className={style.newTask}>
-              <input type="text" name="name" value={task.name} onChange={checkNewTask} />
-              {toDoList &&
+              <input type="text" name="name" value={task.name} onChange={checkNewTask} autoFocus />
+              {toDoList && <>
                 <select onChange={checkNewTask} name="priority" value={task.priority}>
+                  <option value="" disabled>Select Priority</option>
                   <option value="Urgent">Urgent</option>
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
                   <option value="Low">Low</option>
                 </select>
+                <button onClick={createTask} disabled={task.name == "" || task.priority == ""}>Create Task</button>
+              </>
               }
-              <button onClick={() => setNewTask(true)} disabled={task.name.length == 0}>Create Task</button>
+              {!toDoList && <button onClick={createTask} disabled={task.name == ""}>Create Item</button>}
               <button onClick={goBack}>Go Back</button>
             </div>
           </div>

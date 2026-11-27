@@ -105,6 +105,14 @@
   gap: 30px;
 }
 
+.noItems{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 .newTask input[type="text"],
 .newTask select,
 .newTask button {
