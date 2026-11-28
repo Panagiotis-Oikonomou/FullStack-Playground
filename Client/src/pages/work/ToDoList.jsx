@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
   const toDoList = true;
+  const [showFilters, setShowFilters] = useState(false);
   const [newTask, setNewTask] = useState(true);
   const [task, setTask] = useState({ name: "", priority: "" });
 
@@ -130,7 +131,19 @@ function ToDoList() {
               )}
               <div className={style.bottomRight}>
                 <button>Save Changes</button>
-                {toDoList && <span title="Filter"><Filter /></span>}
+                <div className={style.filterContainer}>
+                  {showFilters &&
+                    <div className={style.filtersAll}>
+                      <span className={style.filterTitle}>Filters</span>
+                      <div className={style.filters}>
+                        {toDoList && <span className={style.filter}>Priority</span>}
+                        <span className={style.filter}>Name Ascending</span>
+                        <span className={style.filter}>Name Descending</span>
+                      </div>
+                    </div>
+                  }
+                  {toDoList && <span title="Filter" onClick={() => setShowFilters(prev => !prev)}><Filter /></span>}
+                </div>
               </div>
             </div>
           </div>) : (
