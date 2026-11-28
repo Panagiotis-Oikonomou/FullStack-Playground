@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import style from "./ToDoList.module.css";
 import { Trash2, EditIcon, Filter } from "lucide-react";
 import Swal from "sweetalert2";
+import { sortByNameAscending, sortByNameDescending, sortByPriorityAscending, sortByPriorityDescending } from "../../utils/sorting";
 
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
   const toDoList = true;
   const [showFilters, setShowFilters] = useState(false);
   const [newTask, setNewTask] = useState(true);
+  const [sortingMethod, setSortingMethod] = useState("ascending");
   const [task, setTask] = useState({ name: "", priority: "" });
 
   useEffect(() => { document.title = "To Do List" }, []);
@@ -44,13 +46,42 @@ function ToDoList() {
 
   function createTask() {
     setTasks(prev => {
-      const updated = [...prev];
-      updated.push({ task: task.name, priority: task.priority, change: false, check: false });
-      return updated;
+      const updated = [
+        ...prev,
+        { task: task.name, priority: task.priority, change: false, check: false }
+      ];
+
+      return sortTasks(sortingMethod, updated);
     });
+
     goBack();
   }
 
+  function goForNewTask() {
+    setNewTask(false);
+    setShowFilters(false);
+  }
+
+  function sortTasks(method, list) {
+    setSortingMethod(method);
+    switch (method) {
+      case "ascending":
+        return sortByNameAscending(list);
+
+      case "descending":
+        return sortByNameDescending(list);
+
+      case "priorityasc":
+        return sortByPriorityAscending(list);
+
+      case "prioritydesc":
+        return sortByPriorityDescending(list);
+
+      default:
+        return list;
+    }
+  }
+  
   return (
     <div className={style.container}>
       <div className={style.title}>
@@ -99,10 +130,10 @@ function ToDoList() {
                           <td>
                             <div className={style.priority}>
                               <select name="priority" value={value.priority} disabled={!value.change} onChange={(e) => changeEdit(e.target.value, index, "priority")} >
-                                <option value="Urgent">Urgent</option>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
+                                <option value="1">Urgent</option>
+                                <option value="2">High</option>
+                                <option value="3">Medium</option>
+                                <option value="4">Low</option>
                               </select>
                             </div>
                           </td>
@@ -125,9 +156,9 @@ function ToDoList() {
 
             <div className={style.bottom}>
               {toDoList ? (
-                <button onClick={() => setNewTask(false)}>New Task</button>
+                <button onClick={goForNewTask}>New Task</button>
               ) : (
-                <button onClick={() => setNewTask(false)}>New Item</button>
+                <button onClick={goForNewTask}>New Item</button>
               )}
               <div className={style.bottomRight}>
                 <button>Save Changes</button>
@@ -136,9 +167,10 @@ function ToDoList() {
                     <div className={style.filtersAll}>
                       <span className={style.filterTitle}>Filters</span>
                       <div className={style.filters}>
-                        {toDoList && <span className={style.filter}>Priority</span>}
-                        <span className={style.filter}>Name Ascending</span>
-                        <span className={style.filter}>Name Descending</span>
+                        {toDoList && <span className={style.filter} onClick={() => setTasks(sortTasks("priorityasc", tasks))}>Priority Ascending</span>}
+                        {toDoList && <span className={style.filter} onClick={() => setTasks(sortTasks("prioritydesc", tasks))}>Priority Descending</span>}
+                        <span className={style.filter} onClick={() => setTasks(sortTasks("ascending", tasks))}>Name Ascending</span>
+                        <span className={style.filter} onClick={() => setTasks(sortTasks("descending", tasks))}>Name Descending</span>
                       </div>
                     </div>
                   }
@@ -155,10 +187,10 @@ function ToDoList() {
                 <>
                   <select onChange={checkNewTask} name="priority" value={task.priority}>
                     <option value="" disabled>Select Priority</option>
-                    <option value="Urgent">Urgent</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
+                    <option value="1">Urgent</option>
+                    <option value="2">High</option>
+                    <option value="3">Medium</option>
+                    <option value="4">Low</option>
                   </select>
                   <button onClick={createTask} disabled={task.name == "" || task.priority == ""}>Create Task</button>
                 </>
